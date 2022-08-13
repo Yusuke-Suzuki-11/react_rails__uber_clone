@@ -3,7 +3,7 @@ import styled from "styled-components";
 import MainLogo from "../images/logo.png";
 import MainCoverImage from "../images/main-cover-image.png";
 import { fetchRestaurants } from "../apis/restaurants";
-import { Link } from "@material-ui/icons";
+import { Link } from "react-router-dom";
 import { Skeleton } from "@material-ui/lab";
 import { REQUEST_STATE } from "../constants";
 
@@ -20,13 +20,14 @@ export const Restaurants = () => {
 
   useEffect(() => {
     dispatch({ type: restaurantsActionTyps.FETCHING });
-    fetchRestaurants().then((data) =>
+    fetchRestaurants().then((data) => {
       dispatch({
         type: restaurantsActionTyps.FETCH_SUCCESS,
         payload: {
           restaurants: data.restaurants,
         },
       })
+    }
     );
   }, []);
 
@@ -41,9 +42,9 @@ export const Restaurants = () => {
       <RestaurantsContentsList>
         {state.fetchState === REQUEST_STATE.LOADING ? (
           <Fragment>
-            <Skeleton variant="rect" width={450} height={300} />
-            <Skeleton variant="rect" width={450} height={300} />
-            <Skeleton variant="rect" width={450} height={300} />
+            <Skeleton variant="rect" width={650} height={300} />
+            <Skeleton variant="rect" width={650} height={300} />
+            <Skeleton variant="rect" width={650} height={300} />
           </Fragment>
         ) : (
           state.restaurantsList.map((item, index) => (
