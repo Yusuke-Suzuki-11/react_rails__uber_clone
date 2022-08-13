@@ -1,8 +1,13 @@
-import React, { Fragment, useEffect } from 'react';
-import styled from 'styled-components';
-import MainLogo from '../images/logo.png';
-import MainCoverImage from '../images/main-cover-image.png';
-import {fetchRestaurants} from '../apis/restaurants' 
+import React, { Fragment, useEffect, useReducer } from "react";
+import styled from "styled-components";
+import MainLogo from "../images/logo.png";
+import MainCoverImage from "../images/main-cover-image.png";
+import { fetchRestaurants } from "../apis/restaurants";
+import {
+  initialState,
+  restaurantsActionTyps,
+  restaurantsReducer,
+} from "../reducers/restaurants";
 
 const HeaderWrapper = styled.div`
   display: flex;
@@ -12,7 +17,7 @@ const HeaderWrapper = styled.div`
 
 const MainLogoImage = styled.img`
   height: 90px;
-`
+`;
 
 const MainCoverImageWrapper = styled.div`
   text-align: center;
@@ -23,12 +28,19 @@ const MainCover = styled.img`
 `;
 
 export const Restaurants = () => {
+  const [state, dispatch] = useReducer(restaurantsReducer, initialState);
+
   useEffect(() => {
-    fetchRestaurants()
-    .then((data) =>
-      console.log(data)
-    )
-  }, [])
+    dispatch({ type: restaurantsActionTyps.FETCHING });
+    fetchRestaurants().then((data) =>
+      dispatch({
+        type: restaurantsActionTyps.FETCH_SUCCESS,
+        payload: {
+          restaurants: data.restaurants,
+        },
+      })
+    );
+  }, []);
 
   return (
     <Fragment>
@@ -38,6 +50,9 @@ export const Restaurants = () => {
       <MainCoverImageWrapper>
         <MainCover src={MainCoverImage} alt="main cover" />
       </MainCoverImageWrapper>
+      {state.restaurantsList.map((restaurant) => (
+        <div key={restaurant.id}>{restaurant.name}</div>
+      ))}
     </Fragment>
-  )
-}
+  );
+};
