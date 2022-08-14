@@ -1,4 +1,3 @@
-# --- ここから追加 ---
 module Api
     module V1
         class LineFoodsController < ApplicationController
